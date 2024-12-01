@@ -4,11 +4,29 @@
 from telebot.util import quick_markup
 
 
-class CallBackHandler:
-    pass
+class CallBackHandler:  #Класс для обработки инлайн кнопок и регистрации функций
+    def __init__(self, bot):
+        self.bot = bot
+        self.callbacks = {}
+
+    def callback_register(self, command, func):
+        self.callbacks[command] = func
+
+    async def handle_callback(self, call):
+        if call.data in self.callbacks:
+            try:
+                await self.callbacks[call.data](call)
+            except Exception as e:
+                await self.bot.send_message(
+                    call.message.chat.id,
+                    f"Ошибка обработки команды {call.data}: {e}")
+        else:
+            await self.bot.send_message(
+                call.message.chat.id,
+                "Незарегистрированная команда")
 
 
-class CommandHandler:
+class SlashCommandHandler:
     pass
 
 

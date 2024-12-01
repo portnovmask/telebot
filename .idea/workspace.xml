@@ -5,45 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="26a6a07d-5674-4ac1-9ff0-e2a01c0ce37f" name="Changes" comment="initial">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/telebot.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gpt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/avatar_main.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/gpt.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/main.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/message.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/quiz.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/random.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk_cobain.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk_hawking.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk_nietzsche.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk_queen.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/images/talk_tolkien.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/messages/gpt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/messages/main.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/messages/quiz.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/messages/random.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/messages/talk.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/gpt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/main.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/quiz.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/random.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/talk_cobain.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/talk_hawking.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/talk_nietzsche.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/talk_queen.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/prompts/talk_tolkien.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tasks.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot1.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,9 +17,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2pXJ5l90hBcIbQMv4FjQWik9Fll" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -105,12 +69,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/util.py</url>
-          <line>40</line>
+          <line>58</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" log-message="true" suspend="NONE" type="python-line">
           <url>file://$PROJECT_DIR$/util.py</url>
-          <line>50</line>
+          <line>68</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
