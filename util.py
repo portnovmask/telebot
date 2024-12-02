@@ -9,9 +9,11 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
         self.bot = bot
         self.callbacks = {}
 
+    #Регистрация обработчиков кнопок
     def callback_register(self, command, func):
         self.callbacks[command] = func
 
+    #Вызов обработчика для конкретной кнопки
     async def handle_callback(self, call):
         if call.data in self.callbacks:
             try:
@@ -26,13 +28,7 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                 "Незарегистрированная команда")
 
 
-class SlashCommandHandler:
-    pass
-
-
-class MarkUpPicker:
-    pass
-
+#Наборы кнопок
 
 on_start_markup = quick_markup({
     'Интересный факт': {'callback_data': '/random'},
@@ -48,6 +44,9 @@ menu_random_markup = quick_markup({
 }, row_width=2)
 
 
+#Набор вспомогательных функций:
+
+#
 # конвертирует объект user в строку
 def dialog_user_info_to_str(user_data) -> str:
     mapper = {'language_from': 'Язык оригинала', 'language_to': 'Язык перевода',

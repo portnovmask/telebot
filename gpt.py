@@ -9,7 +9,7 @@ class ChatGptService:
     def __init__(self, token):
         token = "sk-proj-" + token[:3:-1] if token.startswith('gpt:') else token
         self.client = OpenAI(
-            http_client=httpx.Client(proxies="http://18.199.183.77:49232"),
+            http_client=httpx.Client(proxy="http://18.199.183.77:49232"),
             api_key=token)
         self.message_list = []
 
@@ -22,6 +22,7 @@ class ChatGptService:
         )
         message = completion.choices[0].message
         self.message_list.append(message)
+        print(message.content)
         return message.content
 
     def set_prompt(self, prompt_text: str) -> None:
