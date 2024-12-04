@@ -29,20 +29,72 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
 
 
 #Наборы кнопок
-
+#Стартовое меню
 on_start_markup = quick_markup({
     'Интересный факт': {'callback_data': '/random'},
     'Спросить у эксперта': {'callback_data': '/talk'},
-    'Квиз': {'callback_data': '/quiz'},
-    'Рецепт по фото': {'callback_data': '/gpt'},
-    'Back': {'callback_data': 'whatever'}
+    'Кулинарный квиз': {'callback_data': '/quiz'},
+    'Рецепт по фото': {'callback_data': '/guess'},
+    'Спросить chatGPT': {'callback_data': '/gpt'},
+    'Приготовить': {'callback_data': '/recipe'}
 }, row_width=2)
 
-menu_random_markup = quick_markup({
+#Случайный факт
+menu_random_end_markup = quick_markup({
     'Хочу еще факт': {'callback_data': '/random'},
     'Закончить': {'callback_data': '/start'},
 }, row_width=2)
 
+#Завершение квиза
+menu_quiz_end_markup = quick_markup({
+    'Новый квиз': {'callback_data': '/quiz'},
+    'Закончить': {'callback_data': '/start'},
+}, row_width=2)
+
+#Выбор квиза
+menu_quiz_pick_markup = quick_markup({
+    'История кулинарии': {'callback_data': '/history'},
+    'Угадай ингридиент': {'callback_data': '/ingredient'},
+    'Бабушкины хитрости': {'callback_data': '/how'},
+    'Диеты': {'callback_data': '/diets'},
+}, row_width=2)
+
+#Следующий вопрос квиза
+menu_quiz_next_markup = quick_markup({
+    'Следующий вопрос': {'callback_data': '/next'},
+    'Пропустить вопрос': {'callback_data': '/pass'},
+}, row_width=2)
+
+#Завершение gpt диалога
+menu_gpt_end_markup = quick_markup({
+    'Начать новый чат': {'callback_data': '/gpt'},
+    'Закончить': {'callback_data': '/start'},
+}, row_width=2)
+
+#Завершение общения со знаменитостью
+menu_talk_end_markup = quick_markup({
+    'Другая знаменитость': {'callback_data': '/talk'},
+    'Закончить': {'callback_data': '/start'},
+}, row_width=2)
+
+
+menu_talk_person_markup = quick_markup({
+    'Блюменталь': {'callback_data': '/blumental'},
+    'Байден': {'callback_data': '/biden'},
+}, row_width=2)
+
+
+menu_recipe_end_markup = quick_markup({
+    'Новый рецепт': {'callback_data': '/recipe'},
+    'Закончить': {'callback_data': '/start'},
+}, row_width=2)
+
+
+menu_guess_end_markup = quick_markup({
+    'Еще картинка': {'callback_data': '/guess'},
+    'Не угадал!': {'callback_data': '/edit_guess'},
+    'Закончить': {'callback_data': '/start'},
+}, row_width=2)
 
 #Набор вспомогательных функций:
 
