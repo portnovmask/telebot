@@ -1,3 +1,4 @@
+import base64
 from openai import OpenAI
 import httpx as httpx
 
@@ -38,3 +39,33 @@ class ChatGptService:
         self.message_list.append({"role": "system", "content": prompt_text})
         self.message_list.append({"role": "user", "content": message_text})
         return await self.send_message_list()
+
+    async def send_image_with_prompt(self, prompt: str, image: str):
+        with open(image, "rb") as f:
+            encoded_string = base64.b64encode(f.read()).decode('utf-8')
+
+        img_type = f"image/{image.split(".")[1]}"
+        print(img_type)
+        print(encoded_string)
+        response = self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": prompt
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{img_type};base64,{encoded_string}"},
+                        }
+                    ]
+                }
+
+            ],
+            temperature=1
+        )
+        return response.choices[0].message.content

@@ -44,9 +44,25 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                 call.message.chat.id,
                 "Незарегистрированная команда")
 
-    async def handle_message(self, message, markup, **kwargs):
+    async def handle_message(self, message, markup=None, **kwargs):
+        print("я в классе")
         for handler in self.message_handlers:
-            content_types = self.message_handlers['content_types']
+
+            # Проверяем структуру элемента handler
+            if not isinstance(handler, dict) or "content_types" not in handler or "func" not in handler:
+                print("Некорректный обработчик:", handler)
+                continue
+
+
+            content_types = handler["content_types"]
+
+            # Проверяем валидность content_types
+            if not isinstance(content_types, list) or not content_types:
+                print("Некорректные content_types:", content_types)
+                continue
+            print(f"message.content_type: {message.content_type}")
+            print(f"self.message_handlers: {self.message_handlers}")
+
             if message.content_type in content_types:
                 try:
                     await handler["func"](message, markup=markup, **kwargs)
@@ -54,8 +70,9 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                     await self.bot.send_message(
                         message.chat.id,
                         f"Ошибка обработки сообщения: {e}"
+
                     )
-                break
+                break  #выходим из цикла после выбора обработчика
 
 
 async def handle_next(self, call, **kwargs):
@@ -125,7 +142,7 @@ markups['talk'] = quick_markup({
 }, row_width=2)
 
 #Выбор знаменитости
-markups['menu_talk_person_markup'] = quick_markup({
+markups['menu_talk'] = quick_markup({
     'Хестон Блюменталь': {'callback_data': '/blumental'},
     'Алан Дюкас': {'callback_data': '/ducas'},
     'Поль Бокюз': {'callback_data': '/bocus'},
@@ -148,8 +165,8 @@ markups['guess'] = quick_markup({
 }, row_width=2)
 
 markups['stop'] = quick_markup({
-    'Закончить': {'callback_data': '/start'},
-}, row_width=1)
+    'Отмена': {'callback_data': '/start'},
+}, row_width=2)
 
 
 #Набор вспомогательных функций:
