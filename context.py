@@ -20,3 +20,4 @@ chat_gpt = ChatGptService(secret_key)
 bot_context = {'main': 'stop'}
 
 callback_handler = CallBackHandler(bot)
+
