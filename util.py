@@ -8,8 +8,6 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
     def __init__(self, bot):
         self.bot = bot
         self.callbacks = {}
-        self.last_state = None
-        self.last_args = {}
         self.message_handlers = []
 
     #Регистрация обработчиков кнопок
@@ -45,7 +43,6 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                 "Незарегистрированная команда")
 
     async def handle_message(self, message, markup=None, **kwargs):
-        print("я в классе")
         for handler in self.message_handlers:
 
             # Проверяем структуру элемента handler
@@ -53,15 +50,7 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                 print("Некорректный обработчик:", handler)
                 continue
 
-
             content_types = handler["content_types"]
-
-            # Проверяем валидность content_types
-            if not isinstance(content_types, list) or not content_types:
-                print("Некорректные content_types:", content_types)
-                continue
-            print(f"message.content_type: {message.content_type}")
-            print(f"self.message_handlers: {self.message_handlers}")
 
             if message.content_type in content_types:
                 try:
@@ -75,25 +64,10 @@ class CallBackHandler:  #Класс для обработки инлайн кн�
                 break  #выходим из цикла после выбора обработчика
 
 
-async def handle_next(self, call, **kwargs):
-    if not self.last_state:
-        return await self.handle_callback(call, **kwargs)
+# Стартовое меню
 
-    self.last_args.update(kwargs)
-    try:
-        await self.last_state(**self.last_args)
-    except Exception as e:
-        call = self.last_args.get("call")
-        if call:
-            await self.bot.send_message(
-                call.message.chat.id,
-                f"Ошибка при повторном вызове: {e}"
-            )
+markups = {}  # Наборы кнопок
 
-
-#Наборы кнопок
-#Стартовое меню
-markups = {}
 markups['on_start_markup'] = quick_markup({
     'Интересный факт': {'callback_data': '/random'},
     'Спросить у эксперта': {'callback_data': '/talk'},
@@ -103,45 +77,47 @@ markups['on_start_markup'] = quick_markup({
     'Приготовить': {'callback_data': '/recipe'}
 }, row_width=2)
 
-#Случайный факт
+# Случайный факт
 markups['random'] = quick_markup({
-    'Хочу еще факт': {'callback_data': '/random'},
-    'Закончить': {'callback_data': '/start'},
+    'Хочу еще факт': {'callback_data': '/random_more'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Завершение квиза
+# Завершение квиза
 markups['quiz'] = quick_markup({
-    'Новый квиз': {'callback_data': '/quiz'},
-    'Закончить': {'callback_data': '/start'},
+    'Новый квиз': {'callback_data': '/quiz_pick'},
+    'Выход': {'callback_data': '/start'},
+    'Cледующий вопрос': {'callback_data': 'quiz_more'},
 }, row_width=2)
 
-#Выбор квиза
-markups['menu_quiz_pick_markup'] = quick_markup({
-    'История кулинарии': {'callback_data': '/history'},
-    'Угадай ингридиент': {'callback_data': '/ingredient'},
-    'Бабушкины хитрости': {'callback_data': '/how'},
-    'Диеты': {'callback_data': '/diets'},
+# Выбор квиза
+markups['quiz_pick'] = quick_markup({
+    'История кулинарии': {'callback_data': 'quiz_history'},
+    'Угадай ингридиент': {'callback_data': 'quiz_ingredient'},
+    'Бабушкины хитрости': {'callback_data': 'quiz_how'},
+    'Диеты': {'callback_data': 'quiz_diets'},
+    'Еще вопрос': {'callback_data': 'quiz_more'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Следующий вопрос квиза
-markups['quiz_next'] = quick_markup({
-    'Следующий вопрос': {'callback_data': '/next'},
-    'Пропустить вопрос': {'callback_data': '/pass'},
+# Продолжить квиз на заданную тему
+markups['quiz_more'] = quick_markup({
+    'Выбрать другую тему': {'callback_data': '/quiz_pick'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Завершение gpt диалога
+# Завершение gpt диалога
 markups['gpt'] = quick_markup({
-    'Начать новый чат': {'callback_data': '/gpt'},
-    'Закончить': {'callback_data': '/start'},
+    'Завершить чат': {'callback_data': '/start'},
 }, row_width=2)
 
-#Завершение общения со знаменитостью
+# Завершение общения со знаменитостью
 markups['talk'] = quick_markup({
-    'Другая знаменитость': {'callback_data': '/talk'},
-    'Закончить': {'callback_data': '/start'},
+    'Другая знаменитость': {'callback_data': '/talk_more'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Выбор знаменитости
+# Выбор знаменитости
 markups['menu_talk'] = quick_markup({
     'Хестон Блюменталь': {'callback_data': '/blumental'},
     'Алан Дюкас': {'callback_data': '/ducas'},
@@ -149,19 +125,17 @@ markups['menu_talk'] = quick_markup({
     'Гордон Рамзи': {'callback_data': '/ramzi'},
     'Джейми Оливер': {'callback_data': '/oliver'},
     'Джо Байден': {'callback_data': '/biden'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Завершение составления рецептов
+# Завершение составления рецептов
 markups['recipe'] = quick_markup({
-    'Новый рецепт': {'callback_data': '/recipe'},
-    'Закончить': {'callback_data': '/start'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
-#Завершения угадывания картинки
+# Завершения угадывания картинки
 markups['guess'] = quick_markup({
-    'Еще картинка': {'callback_data': '/guess'},
-    'Не угадал!': {'callback_data': '/edit_guess'},
-    'Закончить': {'callback_data': '/start'},
+    'Выход': {'callback_data': '/start'},
 }, row_width=2)
 
 markups['stop'] = quick_markup({
@@ -169,7 +143,7 @@ markups['stop'] = quick_markup({
 }, row_width=2)
 
 
-#Набор вспомогательных функций:
+# Набор вспомогательных функций:
 
 # загружает сообщение из папки  /resources/messages/
 def load_message(name):
@@ -183,7 +157,3 @@ def load_prompt(name):
     with open("resources/prompts/" + name + ".txt", "r",
               encoding="utf8") as file:
         return file.read()
-
-
-class Dialog:
-    pass

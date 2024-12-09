@@ -42,7 +42,7 @@ class ChatGptService:
 
     async def send_image_with_prompt(self, prompt: str, image: str):
         with open(image, "rb") as f:
-            encoded_string = base64.b64encode(f.read()).decode('utf-8')
+            encoded_string = base64.b64encode(f.read()).decode('utf-8')  # кодируем картинку и декодируем в строку
 
         img_type = f"image/{image.split(".")[1]}"
         print(img_type)
