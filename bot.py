@@ -18,7 +18,6 @@ async def send_welcome(message):
     text = load_message('main')
     await bot.send_message(
         message.chat.id, text, reply_markup=markups['on_start_markup'])
-    print(message.text)
 
 
 # Возврат в главное меню с инлайн кнопок "Отмена", "Выход" или "Закончить"
@@ -82,7 +81,8 @@ callback_handler.message_handler_register(handle_photo_message, content_types=['
 @bot.callback_query_handler(func=lambda call: True)
 async def inline(call):
     context = bot_context['main']
-    print(f"Сработала кнопка: {call.data}, контекст: {context}")
+    print(f"Сработала кнопка: {call.data}, "
+          f"контекст: {context}")  # Отладочное - отслеживание контекста и callback
     await callback_handler.handle_callback(call)
 
 

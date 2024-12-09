@@ -2,9 +2,6 @@ from context import chat_gpt, bot, bot_context
 from util import load_prompt, load_message, markups
 
 
-
-
-
 async def handle_text_message(message, markup=None):
     response = await chat_gpt.add_message(message.text)
     await bot.send_message(message.chat.id, response, reply_markup=markup)
@@ -19,9 +16,8 @@ async def handle_photo_message(message, markup=None):
 
         # Скачиваем файл в буфер
         file_info = await bot.get_file(file_id)
-        print(f"file info - {file_info}")
         downloaded_file = await bot.download_file(file_info.file_path)
-        print("file downloaded")
+        print("file downloaded")  # Отладочное подтверждение, что файл получен
 
         # Сохраняем файл на сервере
         with open('guess_image.jpg', 'wb') as new_file:
@@ -33,6 +29,3 @@ async def handle_photo_message(message, markup=None):
         await bot.send_message(
             message.chat.id, load_message('sent_image_for_text'),
             reply_markup=markups['on_start_markup'])
-
-
-

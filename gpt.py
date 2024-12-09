@@ -23,7 +23,7 @@ class ChatGptService:
         )
         message = completion.choices[0].message
         self.message_list.append(message)
-        #print(message.content) #проверка ответа GPT в консоль
+
         return message.content
 
     def set_prompt(self, prompt_text: str) -> None:
@@ -45,8 +45,7 @@ class ChatGptService:
             encoded_string = base64.b64encode(f.read()).decode('utf-8')  # кодируем картинку и декодируем в строку
 
         img_type = f"image/{image.split(".")[1]}"
-        print(img_type)
-        print(encoded_string)
+
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
