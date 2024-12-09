@@ -26,36 +26,39 @@ bot_context = {'main': 'stop'}
 @bot.message_handler(commands=['help', 'start', 'stop'])
 async def send_welcome(message):
     bot_context['main'] = 'stop'
-    text = f"""Привет, это бот о кулинарии на базе chatGPT!
-Выбирай из меню ниже, чтобы продолжить:"""
+    text = load_message('main')
     await bot.send_message(
         message.chat.id, text, reply_markup=markups['on_start_markup'])
     print(message.text)
 
 
 # Возврат в главное меню с кнопок "Отмена" или "Закончить"
+
 async def handle_start(call, **kwargs):
     # Проверяем команду
     if call.data == '/start' and bot_context['main'] != 'stop':
         bot_context['main'] = 'stop'
-        await bot.edit_message_text('Возврат в главное меню',
-                                    chat_id=call.message.chat.id,
-                                    message_id=call.message.message_id,
-                                    reply_markup=None,
-                                    timeout=2
-                                    )
+        await bot.edit_message_reply_markup(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            reply_markup=None,
+            timeout=2
+        )
         await send_welcome(call.message)
 
 
 # Функции упаковки вопросов/ответов к/от gpt:
 
+
 # Обработчик текстов и отправка GPT
+
 async def handle_text_message(message, markup=None):
     response = await chat_gpt.add_message(message.text)
     await bot.send_message(message.chat.id, response, reply_markup=markup)
 
 
 # Обработчик картинок и отправка GPT
+
 async def handle_photo_message(message, markup=None):
     if bot_context['main'] == 'guess':
         # Получаем id медиа файла
@@ -78,7 +81,7 @@ async def handle_photo_message(message, markup=None):
             reply_markup=markups['on_start_markup'])
 
 
-# Функции обработки кнопок главного меню
+# Функции обработки callback кнопок главного меню
 
 # Обработчик случайный факт
 async def handle_random(call, re_quest, pic, **kwargs):
@@ -105,6 +108,7 @@ async def handle_random(call, re_quest, pic, **kwargs):
 async def handle_random_more(call, re_quest, **kwargs):
     if bot_context['main'] == 'random':
         re_quest = 'random'
+
         # Удаляем inline-разметку из предыдущего сообщения
 
         await bot.edit_message_reply_markup(
@@ -118,7 +122,9 @@ async def handle_random_more(call, re_quest, **kwargs):
         await bot.send_message(call.message.chat.id, response,
                                reply_markup=markups['random'])
     else:
-        await send_welcome(call.message)
+        await bot.send_message(
+            call.message.chat.id, load_message('wrong'),
+            reply_markup=markups['on_start_markup'])
 
 
 # Обработчик разговора со знаменитостью, отправляет кнопки выбора знаменитостей
@@ -129,7 +135,7 @@ async def handle_talk(call, re_quest, pic, **kwargs):
 
     # Редактирование предыдущего сообщения
 
-    await bot.edit_message_text('Проконсультируйтесь со знаменитым шефом или экспертом!',
+    await bot.edit_message_text(load_message('celeb_intro'),
                                 chat_id=call.message.chat.id,
                                 message_id=call.message.message_id,
                                 reply_markup=None,
@@ -137,7 +143,7 @@ async def handle_talk(call, re_quest, pic, **kwargs):
                                 )
     with open(pic, 'rb') as photo:
         await bot.send_photo(call.message.chat.id, photo)
-    await bot.send_message(call.message.chat.id, 'Ниже выберите шефа для чата\n\n',
+    await bot.send_message(call.message.chat.id, load_message('talk'),
                            reply_markup=markups['menu_talk'])
 
 
@@ -155,10 +161,81 @@ async def handle_talk_more(call, re_quest, **kwargs):
             timeout=2
         )
 
-        await bot.send_message(call.message.chat.id, 'Ниже выберите шефа для чата\n\n',
+        await bot.send_message(call.message.chat.id, 'Ниже выберите шефа для чата',
                                reply_markup=markups['menu_talk'])
     else:
-        await send_welcome(call.message)
+        await bot.send_message(
+            call.message.chat.id, load_message('wrong2'),
+            reply_markup=markups['on_start_markup'])
+
+
+# кнопки выбора знаменитости
+async def handle_celeb(call, re_quest, pic, **kwargs):
+    if bot_context['main'] == 'talk':
+
+        # '/ramzi'
+        # '/olver'
+        # '/ducas'
+        # '/bocus'
+        # '/blumental'
+        # '/biden'
+
+        pic = 'resources/images/talk.jpg'
+        re_quest = 'menu_talk'
+        name = ''
+        match call.data:
+            case '/ramzi':
+                case_string = 'ramzi'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Гордон Рамзи'
+            case '/oliver':
+                case_string = 'oliver'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Джейми Оливер'
+            case '/ducas':
+                case_string = 'ducas'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Ален Дюкасс'
+            case '/bocus':
+                case_string = 'bocus'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Поль Бокюз'
+            case '/blumental':
+                case_string = 'blumental'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Хестон Блюменталь'
+            case '/biden':
+                case_string = 'biden'
+                pic = f'resources/images/{case_string}.png'
+                re_quest = case_string
+                name = 'Джо Байден'
+            case _:
+                case_string = '/stop'
+                pic = f'resources/images/bye.jpg'
+                re_quest = case_string
+        prompt = load_prompt(re_quest)
+        # Удаляем inline-разметку из предыдущего сообщения
+        text = f"С вами будет говорить {name}, пытаюсь с ним связаться..."
+        await bot.edit_message_text(text,
+                                    chat_id=call.message.chat.id,
+                                    message_id=call.message.message_id,
+                                    reply_markup=None,
+                                    timeout=4
+                                    )
+        with open(pic, 'rb') as photo:
+            await bot.send_photo(call.message.chat.id, photo)
+        response = await chat_gpt.send_question(prompt, "Представься, пожалуйста.")
+        await bot.send_message(call.message.chat.id, response,
+                               reply_markup=markups['talk'])
+    else:
+        await bot.send_message(
+            call.message.chat.id, load_message('wrong4'),
+            reply_markup=markups['on_start_markup'])
 
 
 # Обработчик чата с GPT напрямую, роль ассистент
@@ -169,7 +246,7 @@ async def handle_gpt(call, re_quest, pic, **kwargs):
 
     # Удаляем inline-разметку из предыдущего сообщения
 
-    await bot.edit_message_text("Связываемся со свободным GPT ассистентом...\n\n",
+    await bot.edit_message_text("Связываемся со свободным GPT ассистентом...",
                                 chat_id=call.message.chat.id,
                                 message_id=call.message.message_id,
                                 reply_markup=None,
@@ -184,7 +261,7 @@ async def handle_gpt(call, re_quest, pic, **kwargs):
 # Обработчик составления рецепта из набора продуктов, задаёт роль и ожидает ввод продуктов
 async def handle_recipe(call, re_quest, pic, **kwargs):
     bot_context['main'] = 'recipe'
-    pic = 'resources/images/random.jpg'
+    pic = 'resources/images/recipe.png'
     re_quest = 'set_recipe'
 
     # Удаляем inline-разметку из предыдущего сообщения
@@ -219,7 +296,7 @@ async def handle_quiz(call, re_quest, pic, **kwargs):
     with open(pic, 'rb') as photo:
         await bot.send_photo(call.message.chat.id, photo)
     chat_gpt.set_prompt(load_prompt(re_quest))
-    await bot.send_message(call.message.chat.id, 'Выберите тему ниже:\n\n',
+    await bot.send_message(call.message.chat.id, 'Выберите тему квиза:',
                            reply_markup=markups['quiz_pick'])
 
 
@@ -230,94 +307,21 @@ async def handle_quiz_more(call, re_quest, **kwargs):
 
         # Удаляем inline-разметку из предыдущего сообщения
 
-        await bot.edit_message_text("Меняем тему квиза...",
+        await bot.edit_message_text("***Меняем тему квиза***",
                                     chat_id=call.message.chat.id,
                                     message_id=call.message.message_id,
                                     reply_markup=None,
                                     timeout=2
                                     )
-        await bot.send_message(call.message.chat.id, 'Выберите тему ниже:\n\n',
+        await bot.send_message(call.message.chat.id, 'Выберите квиз:\n\n',
                                reply_markup=markups['quiz_pick'])
     else:
-        await send_welcome(call.message)
+        await bot.send_message(
+            call.message.chat.id, load_message('wrong3'),
+            reply_markup=markups['on_start_markup'])
 
 
-# Угадываем картинку
-async def handle_guess(call, re_quest, pic, **kwargs):
-    bot_context['main'] = 'guess'
-    pic = 'resources/images/random.jpg'
-    re_quest = 'guess'
-
-    # Удаляем inline-разметку из предыдущего сообщения
-
-    await bot.edit_message_text("Опытный повар угадает блюдо по картинке.",
-                                chat_id=call.message.chat.id,
-                                message_id=call.message.message_id,
-                                reply_markup=None,
-                                timeout=4
-                                )
-    await bot.send_message(call.message.chat.id, load_message('guess_intro'),
-                           reply_markup=markups['guess'])
-
-
-# Выбор знаменитости
-
-async def handle_celeb(call, re_quest, pic, **kwargs):
-    if bot_context['main'] == 'talk':
-        # '/ramzi'
-        # '/olver'
-        # '/ducas'
-        # '/bocus'
-        # '/blumental'
-        # '/biden'
-        pic = 'resources/images/talk.jpg'
-        re_quest = 'menu_talk'
-        match call.data:
-            case '/ramzi':
-                case_string = 'ramzi'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case '/oliver':
-                case_string = 'oliver'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case '/ducas':
-                case_string = 'ducas'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case '/bocus':
-                case_string = 'bocus'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case '/blumental':
-                case_string = 'blumental'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case '/biden':
-                case_string = 'biden'
-                pic = f'resources/images/{case_string}.png'
-                re_quest = case_string
-            case _:
-                case_string = '/stop'
-                pic = f'resources/images/bye.jpg'
-                re_quest = case_string
-        prompt = load_prompt(re_quest)
-        # Удаляем inline-разметку из предыдущего сообщения
-
-        await bot.edit_message_text("Вы выбрали знаменитость, пытаюсь с ним связаться...",
-                                    chat_id=call.message.chat.id,
-                                    message_id=call.message.message_id,
-                                    reply_markup=None,
-                                    timeout=4
-                                    )
-        with open(pic, 'rb') as photo:
-            await bot.send_photo(call.message.chat.id, photo)
-        response = await chat_gpt.send_question(prompt, "Представься, пожалуйста.")
-        await bot.send_message(call.message.chat.id, response,
-                               reply_markup=markups['talk'])
-
-
-# Выбор темы квиза
+# Кнопки выбора темы квиза
 async def handle_quiz_choices(call, re_quest, pic, **kwargs):
     if bot_context['main'] == 'quiz':
         # 'История кулинарии': {'callback_data': 'quiz_history'},
@@ -360,6 +364,30 @@ async def handle_quiz_choices(call, re_quest, pic, **kwargs):
             response = await chat_gpt.add_message(re_quest)
             await bot.send_message(call.message.chat.id, response,
                                    reply_markup=markups['quiz_more'])
+    else:
+        await bot.send_message(
+            call.message.chat.id, load_message('wrong5'),
+            reply_markup=markups['on_start_markup'])
+
+
+# Угадываем картинку, меняем контекст на подходящий для приема изображений
+async def handle_guess(call, re_quest, pic, **kwargs):
+    bot_context['main'] = 'guess'
+    pic = 'resources/images/guess.png'
+    re_quest = 'guess'
+
+    # Удаляем inline-разметку из предыдущего сообщения
+
+    await bot.edit_message_text("Опытный повар угадает блюдо по картинке.",
+                                chat_id=call.message.chat.id,
+                                message_id=call.message.message_id,
+                                reply_markup=None,
+                                timeout=4
+                                )
+    with open(pic, 'rb') as photo:
+        await bot.send_photo(call.message.chat.id, photo)
+    await bot.send_message(call.message.chat.id, load_message('guess_intro'),
+                           reply_markup=markups['guess'])
 
 
 # Обработчики инлайн кнопок и сообщений
@@ -391,6 +419,7 @@ callback_handler.callback_register('/blumental', handle_celeb)
 callback_handler.callback_register('/biden', handle_celeb)
 
 # Квизы кнопки
+
 callback_handler.callback_register('quiz_history', handle_quiz_choices)
 callback_handler.callback_register('quiz_ingredient', handle_quiz_choices)
 callback_handler.callback_register('quiz_how', handle_quiz_choices)
@@ -398,6 +427,7 @@ callback_handler.callback_register('quiz_diets', handle_quiz_choices)
 callback_handler.callback_register('quiz_more', handle_quiz_choices)
 
 # Одна кнопка Хватит, Законить или отмена
+
 callback_handler.callback_register(
     '/start', handle_start)
 
@@ -418,20 +448,21 @@ async def inline(call):
 # Ловим текстовые сообщения от пользователя
 @bot.message_handler(func=lambda message: True)
 async def message_handler(message):
-    print("Я в декораторе")
-    if bot_context['main'] != 'guess' and bot_context['main'] != 'stop' and bot_context['main'] != 'random':
+    if (bot_context['main'] != 'guess'
+            and bot_context['main'] != 'stop'
+            and bot_context['main'] != 'random'
+            and bot_context['main'] != 'quiz_more'):
         await callback_handler.handle_message(message, markup=markups[bot_context['main']])
     else:
         await bot.send_message(
             message.chat.id,
-            'В данном режиме GPT не принимает текстовые сообщения, выберите подходящий режим в меню выше',
+            load_message('sent_text_for_image'),
             reply_markup=markups['stop'])
 
 
 # Ловим фотографии от пользователя
 @bot.message_handler(func=lambda message: True, content_types=['photo'])
 async def photo_handler(message):
-    print("Я в фото декораторе")
     await callback_handler.handle_message(message, markup=markups[bot_context['main']])
 
 

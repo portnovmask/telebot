@@ -23,7 +23,7 @@ class ChatGptService:
         )
         message = completion.choices[0].message
         self.message_list.append(message)
-        print(message.content)
+        #print(message.content) #проверка ответа GPT в консоль
         return message.content
 
     def set_prompt(self, prompt_text: str) -> None:

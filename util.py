@@ -120,7 +120,7 @@ markups['talk'] = quick_markup({
 # Выбор знаменитости
 markups['menu_talk'] = quick_markup({
     'Хестон Блюменталь': {'callback_data': '/blumental'},
-    'Алан Дюкас': {'callback_data': '/ducas'},
+    'Ален Дюкасс': {'callback_data': '/ducas'},
     'Поль Бокюз': {'callback_data': '/bocus'},
     'Гордон Рамзи': {'callback_data': '/ramzi'},
     'Джейми Оливер': {'callback_data': '/oliver'},
