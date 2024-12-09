@@ -3,6 +3,8 @@ from telebot.util import quick_markup
 
 class CallBackHandler:  #Класс для обработки инлайн кнопок и регистрации функций
     def __init__(self, bot):
+        self.last_args = {}
+        self.last_state = None
         self.bot = bot
         self.callbacks = {}
         self.message_handlers = []
