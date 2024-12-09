@@ -1,6 +1,3 @@
-#import aiohttp
-#import asyncio
-#from telebot.async_telebot import AsyncTeleBot
 from telebot.util import quick_markup
 
 
@@ -93,7 +90,7 @@ markups['quiz'] = quick_markup({
 # Выбор квиза
 markups['quiz_pick'] = quick_markup({
     'История кулинарии': {'callback_data': 'quiz_history'},
-    'Угадай ингридиент': {'callback_data': 'quiz_ingredient'},
+    'Угадай ингредиент': {'callback_data': 'quiz_ingredient'},
     'Бабушкины хитрости': {'callback_data': 'quiz_how'},
     'Диеты': {'callback_data': 'quiz_diets'},
     'Еще вопрос': {'callback_data': 'quiz_more'},

@@ -4,6 +4,7 @@ from telebot.async_telebot import AsyncTeleBot
 from gpt import ChatGptService
 from util import markups, CallBackHandler, load_prompt, load_message
 import asyncio
+#from handlers.main_menu import handle_random, handle_random_more, handle_celeb, handle_talk, handle_talk_more, handle_quiz, handle_quiz_more, handle_quiz_choices, handle_gpt, handle_guess, handle_recipe, bot_context
 
 # Загрузка переменных сетевого окружения
 
@@ -32,7 +33,7 @@ async def send_welcome(message):
     print(message.text)
 
 
-# Возврат в главное меню с кнопок "Отмена" или "Закончить"
+# Возврат в главное меню с инлайн кнопок "Отмена", "Выход" или "Закончить"
 
 async def handle_start(call, **kwargs):
     # Проверяем команду
@@ -73,12 +74,14 @@ async def handle_photo_message(message, markup=None):
         # Сохраняем файл на сервере
         with open('guess_image.jpg', 'wb') as new_file:
             new_file.write(downloaded_file)
-        response = await chat_gpt.send_image_with_prompt(load_prompt('guess'), 'guess_image.jpg')
+        response = await chat_gpt.send_image_with_prompt(
+            load_prompt('guess'), 'guess_image.jpg')
         await bot.send_message(message.chat.id, response, reply_markup=markup)
     else:
         await bot.send_message(
-            message.chat.id, 'Для обработки изображенний выберите *Рецепт по фото* в меню ниже:',
+            message.chat.id, load_message('sent_image_for_text'),
             reply_markup=markups['on_start_markup'])
+
 
 
 # Функции обработки callback кнопок главного меню
@@ -388,6 +391,7 @@ async def handle_guess(call, re_quest, pic, **kwargs):
         await bot.send_photo(call.message.chat.id, photo)
     await bot.send_message(call.message.chat.id, load_message('guess_intro'),
                            reply_markup=markups['guess'])
+
 
 
 # Обработчики инлайн кнопок и сообщений
