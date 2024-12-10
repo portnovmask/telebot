@@ -24,7 +24,7 @@ async def send_welcome(message):
 
 async def handle_start(call, **kwargs):
     # Проверяем команду
-    if call.data == 'start' and bot_context['main'] != 'stop':
+    if call.data == '/start' and bot_context['main'] != 'stop':
         bot_context['main'] = 'stop'
         await bot.edit_message_reply_markup(
             chat_id=call.message.chat.id,
@@ -69,7 +69,7 @@ callback_handler.callback_register('quiz_more', handle_quiz_choices)
 # Одна кнопка Хватит, Законить или отмена
 
 callback_handler.callback_register(
-    'start', handle_start)
+    '/start', handle_start)
 
 # Регистрируем обработчики текстовых и медиа сообщений
 

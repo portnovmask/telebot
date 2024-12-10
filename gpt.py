@@ -44,7 +44,7 @@ class ChatGptService:
         with open(image, "rb") as f:
             encoded_string = base64.b64encode(f.read()).decode('utf-8')  # кодируем картинку и декодируем в строку
 
-        img_type = f"image/{image.split(".")[1]}"
+        img_type = "image/{0}".format(image.split(".")[1])
 
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
