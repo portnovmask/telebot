@@ -32,7 +32,8 @@ async def handle_start(call, **kwargs):
             reply_markup=None,
             timeout=2
         )
-        await send_welcome(call.message)
+        await bot.send_message(
+            call.message.chat.id, 'Что будем готовить?', reply_markup=markups['on_start_markup'])
 
 
 # Регистрируем функции обработчики команд с кнопок и из сообщений
