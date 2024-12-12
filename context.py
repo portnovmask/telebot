@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 import os
 from telebot.async_telebot import AsyncTeleBot
 from gpt import ChatGptService
-from util import markups, CallBackHandler, load_prompt, load_message
+from util import CallBackHandler
+import logging
 
 # Загрузка переменных сетевого окружения
 
@@ -21,3 +22,14 @@ bot_context = {'main': 'stop'}
 
 callback_handler = CallBackHandler(bot)
 
+logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="a",
+                    format="%(asctime)s %(levelname)s %(message)s")
+logging.debug("A DEBUG Message")
+logging.info("An INFO")
+logging.warning("A WARNING")
+logging.error("An ERROR")
+logging.critical("A message of CRITICAL severity")
+
+
+def logger(user_name):
+    logging.info(f'Пользоавтель {user_name} - ')

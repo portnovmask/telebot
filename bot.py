@@ -1,4 +1,4 @@
-from context import bot, bot_context, callback_handler
+from context import bot, bot_context, callback_handler, logger
 from util import load_message, markups
 from handlers.callbacks import (handle_quiz_more,
                                 handle_celeb, handle_gpt, handle_guess,
@@ -14,6 +14,8 @@ import asyncio
 
 @bot.message_handler(commands=['help', 'start', 'stop'])
 async def send_welcome(message):
+    user_name = message.from_user.username
+    logger(user_name)
     bot_context['main'] = 'stop'
     text = load_message('main')
     await bot.send_message(
@@ -24,7 +26,7 @@ async def send_welcome(message):
 
 async def handle_start(call, **kwargs):
     # Проверяем команду
-    if call.data == '/start' and bot_context['main'] != 'stop':
+    if call.data == '/start':
         bot_context['main'] = 'stop'
         await bot.edit_message_reply_markup(
             chat_id=call.message.chat.id,
