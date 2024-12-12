@@ -1,4 +1,4 @@
-from context import callback_handler, chat_gpt, bot, bot_context
+from context import callback_handler, chat_gpt, bot, bot_context, questions
 from util import markups, load_prompt, load_message
 
 
@@ -205,6 +205,7 @@ async def handle_quiz(call, re_quest, pic, **kwargs):
     bot_context['main'] = 'quiz'
     pic = 'resources/images/quiz.jpg'
     re_quest = 'quiz'
+    questions()   # добавляем порядковый номер вопроса
 
     # Удаляем inline-разметку из предыдущего сообщения
 

@@ -20,7 +20,11 @@ chat_gpt = ChatGptService(secret_key)
 
 bot_context = {'main': 'stop'}
 
+# Объект класса регистрации и управления обработчиками
+
 callback_handler = CallBackHandler(bot)
+
+# Конфигуратор логирования
 
 logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="a",
                     format="%(asctime)s %(levelname)s %(message)s")
@@ -31,10 +35,12 @@ logging.error("An ERROR")
 logging.critical("A message of CRITICAL severity")
 
 
+# Логирование пользователей
 def logger(user_name):
-    logging.info(f'Пользоавтель {user_name} - ')
+    logging.info(f'Подключился пользоавтель: {user_name} - ')
 
 
+# Подсчёт очков в квизе
 def get_score():
     count = 0
 
@@ -46,4 +52,5 @@ def get_score():
     return counter
 
 
-score = get_score()
+score = get_score()  # Количество правлиьных ответов
+questions = get_score()  # Количество вопросов
