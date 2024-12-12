@@ -86,6 +86,10 @@ markups['random'] = quick_markup({
 markups['quiz'] = quick_markup({
     'Новый квиз': {'callback_data': '/quiz_pick'},
     'Выход': {'callback_data': '/start'},
+}, row_width=2)
+
+# Следующий вопрос
+markups['quiz_next'] = quick_markup({
     'Cледующий вопрос': {'callback_data': 'quiz_more'},
 }, row_width=2)
 
@@ -95,7 +99,6 @@ markups['quiz_pick'] = quick_markup({
     'Угадай ингредиент': {'callback_data': 'quiz_ingredient'},
     'Бабушкины хитрости': {'callback_data': 'quiz_how'},
     'Диеты': {'callback_data': 'quiz_diets'},
-    'Еще вопрос': {'callback_data': 'quiz_more'},
     'Выход': {'callback_data': '/start'},
 }, row_width=2)
 

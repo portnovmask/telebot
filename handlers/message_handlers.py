@@ -13,10 +13,10 @@ async def handle_text_message(message, markup=None):
 
     if response == "Правильно!":
         count = f"Правильных ответов: {score()}"
-    await bot.send_message(message.chat.id, response)
+    await bot.send_message(message.chat.id, response, reply_markup=markup)
     if bot_context['main'] == 'quiz':
         user_score = f"{count} / {questions() - 1}."  # Кол-во правильных ответов из заданных вопросов
-        await bot.send_message(message.chat.id, user_score, reply_markup=markup)
+        await bot.send_message(message.chat.id, user_score, reply_markup=markups['quiz_next'])
 
 
 # Обработчик картинок и отправка GPT
