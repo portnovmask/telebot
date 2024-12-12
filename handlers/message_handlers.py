@@ -7,11 +7,15 @@ count = 'Правильных ответов: 0'
 async def handle_text_message(message, markup=None):
     global count
     response = await chat_gpt.add_message(message.text)
+
+    #  Даём очко если ответ правильный, считаем вопросы, обращаемся к функции
+    #  get_score в модуле context
+
     if response == "Правильно!":
         count = f"Правильных ответов: {score()}"
     await bot.send_message(message.chat.id, response)
     if bot_context['main'] == 'quiz':
-        user_score = f"{count} из {questions() - 1} вопросов."
+        user_score = f"{count} / {questions() - 1}."  # Кол-во правильных ответов из заданных вопросов
         await bot.send_message(message.chat.id, user_score, reply_markup=markup)
 
 
