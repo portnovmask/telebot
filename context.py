@@ -33,3 +33,17 @@ logging.critical("A message of CRITICAL severity")
 
 def logger(user_name):
     logging.info(f'Пользоавтель {user_name} - ')
+
+
+def get_score():
+    count = 0
+
+    def counter():
+        nonlocal count
+        count += 1
+        return count
+
+    return counter
+
+
+score = get_score()

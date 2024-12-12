@@ -1,11 +1,17 @@
-from context import chat_gpt, bot, bot_context
+from context import chat_gpt, bot, bot_context, score
 from util import load_prompt, load_message, markups
+
+count = 'Правильных ответов: 0'
 
 
 async def handle_text_message(message, markup=None):
+    global count
     response = await chat_gpt.add_message(message.text)
+    if response == "Правильно!":
+        count = f"Правильных ответов: {score()}"
     await bot.send_message(message.chat.id, response, reply_markup=markup)
-
+    if bot_context['main'] == 'quiz':
+        await bot.send_message(message.chat.id, count)
 
 # Обработчик картинок и отправка GPT
 
